@@ -1,5 +1,11 @@
 # Changelog
 
+## NitroBison 1.6.2
+
+- The app now ships `THIRD-PARTY-NOTICES.txt` with the license text of every bundled open-source package, generated during `npm run build`.
+- `LICENSE` credits the original FastBovine contributors.
+- Releases are built by GitHub Actions; code signing through SignPath activates once it is configured.
+
 ## NitroBison 1.6.1
 
 - Renamed the app from FastBovine to NitroBison, with a new mascot, app icon and installer artwork.
