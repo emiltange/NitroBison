@@ -5,7 +5,7 @@ export const APP_URL = 'app://bundle/';
 const CSP = [
   "default-src 'self'", "script-src 'self'", "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:", "font-src 'self' data:",
-  "connect-src 'self' https://www.googleapis.com https://graph.microsoft.com https://*.1drv.com https://*.sharepoint.com",
+  "connect-src 'self' https://www.googleapis.com https://graph.microsoft.com https://*.1drv.com https://*.sharepoint.com https://api.github.com",
   "worker-src 'self' blob:", "object-src 'none'", "frame-src 'none'", "base-uri 'none'", "form-action 'none'", "frame-ancestors 'none'",
 ].join('; ');
 const MIME = {

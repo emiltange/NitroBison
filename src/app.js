@@ -19,6 +19,7 @@ import { chooseDirectory } from './directory.js';
 import { isFolderHidden } from './folder-preferences.js';
 import { findAICommand, generateAI, testAIConnection, validateAIConfig, isAIConfigured } from './ai.js';
 import { readAISettings, writeAISettings } from './ai-settings.js';
+import { version as APP_VERSION } from '../package.json';
 import { AI_PROVIDER_CATALOG, createAIChatController } from './ai-chat.js';
 import { readProperties, withProperties, propertiesBody, withPropertiesBody, NOTE_STATUSES, statusLabel, addDays } from './collections.js';
 import { renderCollections, NOTE_LAYOUTS, todayDate } from './views.js';
@@ -1416,7 +1417,7 @@ function settingsDialog(section = 'overview', page = null) {
       <div class="settings-buttons"><button class="fb-btn fb-btn--secondary" data-action="import-md" ${readonly() ? 'disabled' : ''}>Import Markdown files</button><button class="fb-btn fb-btn--secondary" data-action="import-folder" ${readonly() || !('webkitdirectory' in document.createElement('input')) ? 'disabled' : ''}>Import Markdown folder</button><button class="fb-btn fb-btn--secondary" data-action="export-vault" ${!nativeDesktop && !('showDirectoryPicker' in window) ? 'disabled aria-describedby="folder-export-help"' : ''}>Export Markdown folder</button><button class="fb-btn fb-btn--secondary" data-action="export-note" ${!currentNote() ? 'disabled' : ''}>Download current note</button><button class="fb-btn fb-btn--secondary" data-action="backup">Download JSON backup</button><button class="fb-btn fb-btn--secondary" data-action="restore" ${readonly() ? 'disabled' : ''}>Restore JSON backup</button></div>
       <p class="fb-meta" id="folder-export-help">${nativeDesktop ? 'Folder export uses the native directory chooser and creates portable Markdown files.' : 'Folder export is available in browsers with directory access, such as desktop Chrome and Edge. In other browsers, download individual Markdown notes or a complete JSON backup.'} Select an empty destination folder to avoid conflicts. Existing differing files are not overwritten.</p>
     </section>
-    <section class="settings-section" data-settings-panel="about" hidden><h3 class="fb-heading">${nativeDesktop ? 'Desktop application' : 'Installation'}</h3><p class="fb-body">${nativeDesktop ? 'The interface is bundled for offline use. Browser notes use a different profile: export a JSON backup there and restore it here. Updates are manual.' : 'Install NitroBison for a focused window and offline access after caching completes.'} Keep external backups before removing app data.</p>${nativeDesktop ? '' : `<button class="fb-btn fb-btn--secondary" data-action="install">${icon('download')}Installation help</button>`}</section>
+    <section class="settings-section" data-settings-panel="about" hidden><h3 class="fb-heading">${nativeDesktop ? 'Desktop application' : 'Installation'}</h3><p class="fb-body">${nativeDesktop ? 'The interface is bundled for offline use. Browser notes use a different profile: export a JSON backup there and restore it here. Updates are manual.' : 'Install NitroBison for a focused window and offline access after caching completes.'} Keep external backups before removing app data.</p><p class="fb-meta">NitroBison ${APP_VERSION}</p><button type="button" class="fb-btn fb-btn--secondary" id="check-updates">Check for updates</button><p id="update-status" class="fb-body" role="status"></p>${nativeDesktop ? '' : `<button class="fb-btn fb-btn--secondary" data-action="install">${icon('download')}Installation help</button>`}</section>
     <section class="settings-section" data-settings-panel="ai" hidden>
       <div class="settings-heading"><h3 class="fb-heading" id="ai-provider-heading">AI endpoint &amp; key</h3><span class="fb-pill">OpenAI-compatible</span></div>
       <p class="fb-body">Choose a provider in the middle menu (or enter any custom OpenAI-compatible URL below). Generate from an explicit <code>/AI your request</code> line, or use the <b>Revise Page</b> section in Note details to revise the active note. Nothing is sent automatically.</p>
@@ -1434,6 +1435,24 @@ function settingsDialog(section = 'overview', page = null) {
     </section>
     </div></div>`);
   for (const selector of ['#theme-choice', '#overview-theme-choice']) $(selector, modal).addEventListener('change', event => { setTheme(event.target.value); $('#theme-choice', modal).value = event.target.value; $('#overview-theme-choice', modal).value = event.target.value; });
+  $('#check-updates', modal).addEventListener('click', async event => {
+    const status = $('#update-status', modal);
+    const button = event.currentTarget;
+    button.disabled = true;
+    status.textContent = 'Checking GitHub…';
+    try {
+      const response = await fetch('https://api.github.com/repos/emiltange/NitroBison/releases/latest', { headers: { Accept: 'application/vnd.github+json' } });
+      if (!response.ok) throw new Error(`GitHub answered ${response.status}`);
+      const release = await response.json();
+      const latest = String(release.tag_name).replace(/^v/, '');
+      const releaseUrl = /^https:\/\/github\.com\//.test(release.html_url) ? release.html_url : 'https://github.com/emiltange/NitroBison/releases/latest';
+      status.innerHTML = latest.localeCompare(APP_VERSION, undefined, { numeric: true }) > 0
+        ? `NitroBison ${html(latest)} is available. <a href="${html(releaseUrl)}" target="_blank" rel="noopener noreferrer">Download it from GitHub</a>.`
+        : `You're up to date (${html(APP_VERSION)}).`;
+    } catch (error) {
+      status.textContent = `Could not check for updates: ${error.message}`;
+    } finally { button.disabled = false; }
+  });
   $('#hide-ai', modal).addEventListener('change', event => { storageSet('nitrobison-hide-ai', String(event.target.checked)); applyHideAI(); });
   $('#show-hidden-folders', modal).addEventListener('change', event => { void run(() => { try { localStorage.setItem('nitrobison-show-hidden-folders', String(event.target.checked)); } catch (error) { event.target.checked = storageGet('nitrobison-show-hidden-folders', 'false') === 'true'; throw error; } renderChrome(); }); });
   $('#ai-config-form', modal).addEventListener('submit', event => {
