@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 26 # desktop-linked-folders tests fail on Node 24
           cache: npm
 
       - run: npm ci
