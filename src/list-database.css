@@ -1,0 +1,95 @@
+.list-db-block { margin: 24px 0; max-width: 100%; min-width: 0; }
+.list-db { border: 1px solid var(--line); border-radius: 9px; background: var(--card); overflow: clip; font-size: .6875rem; line-height: 1.4; color: var(--ink); }
+.list-db [hidden] { display: none !important; }
+.list-db :is(button, input, select) { font: inherit; }
+.list-db button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 30px; padding: 5px 8px; border: 0; border-radius: 5px; background: transparent; color: var(--text-2); white-space: nowrap; transition: transform 120ms var(--ease-out), background-color 120ms ease; }
+.list-db button:active:not(:disabled) { transform: scale(.97); }
+.list-db :is(input, select) { min-width: 0; border: 1px solid var(--line); border-radius: 5px; background: var(--card); color: var(--ink); }
+.list-db :is(button, input, select, a):focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+.list-db-icon { flex: 0 0 auto; width: 15px; height: 15px; color: var(--text-3); }
+.list-db-header { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; min-height: 49px; padding: 9px 12px; border-bottom: 1px solid var(--line-soft); }
+.list-db-heading { display: flex; align-items: center; flex: 1 1 auto; gap: 7px; min-width: 0; }
+.list-db-heading > strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 650; letter-spacing: -.015em; }
+.list-db-count { color: var(--text-3); background: var(--surface-subtle); padding: 1px 5px; border-radius: 4px; font-size: .625rem; font-variant-numeric: tabular-nums; }
+.list-db-scopes { display: inline-flex; align-items: center; gap: 5px; min-width: 0; overflow: hidden; }
+.list-db-scope { overflow: hidden; text-overflow: ellipsis; max-width: 140px; padding: 2px 6px; border-radius: 4px; background: var(--surface-subtle); color: var(--text-3); font-size: .5625rem; white-space: nowrap; }
+.list-db-controls { display: flex; align-items: center; flex: 0 1 auto; gap: 3px; min-width: 0; margin-left: auto; }
+.list-db button.list-db-icon-button { width: 30px; padding: 5px; }
+.list-db button.list-db-new { background: var(--orange); color: var(--on-accent); font-weight: 600; }
+.list-db-new .list-db-icon { color: currentColor; }
+.list-db-search { display: flex; align-items: center; gap: 5px; min-width: 0; width: 140px; padding: 0 5px; border: 1px solid var(--line); border-radius: 5px; background: var(--card); }
+.list-db-search input { width: 100%; min-height: 28px; padding: 4px 0; border: 0; background: transparent; font-size: .625rem; }
+.list-db-search:focus-within { outline: var(--focus-ring); outline-offset: 1px; }
+.list-db-search input:focus-visible { outline: none; }
+.list-db-settings { display: grid; grid-template-columns: minmax(100px, 1.2fr) minmax(110px, 1.2fr) repeat(3, minmax(80px, 1fr)); gap: 10px; padding: 12px; border-bottom: 1px solid var(--line-soft); background: var(--surface-subtle); }
+.list-db-settings label { display: grid; min-width: 0; gap: 5px; color: var(--text-3); font-size: .5625rem; font-weight: 500; }
+.list-db-settings :is(input, select) { width: 100%; min-height: 31px; padding: 5px 6px; font-size: .625rem; }
+.list-db-error { margin: 10px 12px; }
+.list-db-rows { padding: 3px 6px; }
+.list-db-row { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 3px 7px; border-radius: 5px; }
+.list-db-row + .list-db-row { border-top: 1px solid var(--line-soft); border-top-left-radius: 0; border-top-right-radius: 0; }
+.list-db-page-icon { display: inline-flex; flex: 0 0 auto; }
+.markdown-body .list-db a.list-db-title, .list-db a.list-db-title { display: block; min-width: 60px; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); text-decoration: none; font-size: .6875rem; font-weight: 550; }
+.list-db-properties { display: flex; align-items: center; justify-content: flex-end; flex: 0 1 auto; gap: 7px; min-width: 0; margin-left: auto; }
+.list-db-tags { display: flex; gap: 4px; min-width: 0; }
+.list-db-tag, .list-db-date { display: inline-block; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 2px 6px; border-radius: 999px; background: var(--surface-subtle); color: var(--text-3); font-size: .625rem; }
+.list-db-date { flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+.list-db select.list-db-status { flex: 0 0 auto; max-width: 132px; min-height: 27px; padding: 3px 8px 3px 18px; border: 0; border-radius: 999px; background: radial-gradient(circle, currentColor 0 2.5px, transparent 2.5px) 8px center / 5px 5px no-repeat var(--surface-sunken); color: var(--text-2); font-size: .625rem; font-weight: 600; cursor: pointer; }
+.list-db-status[data-tone="todo"] { background-color: var(--surface-sunken); color: var(--text-2); }
+.list-db-status[data-tone="doing"] { background-color: var(--yellow-soft); color: var(--yellow-text); }
+.list-db-status[data-tone="review"] { background-color: var(--blue-soft); color: var(--blue-text); }
+.list-db-status[data-tone="done"] { background-color: var(--green-soft); color: var(--green-text); }
+.list-db-status:disabled { cursor: default; opacity: .75; }
+.list-db-empty { padding: 24px 12px; color: var(--text-3); font-size: .625rem; text-align: center; }
+.list-db button.list-db-add-page { justify-content: flex-start; width: calc(100% - 12px); margin: 2px 6px 6px; padding: 7px; color: var(--text-3); text-align: left; }
+.list-db-create { display: flex; gap: 6px; align-items: center; padding: 9px 12px; border-top: 1px solid var(--line-soft); }
+.list-db-create input { width: 100%; min-width: 0; min-height: 32px; padding: 6px 8px; }
+.list-db-create button { flex: 0 0 auto; }
+
+@media (hover: hover) and (pointer: fine) {
+  .list-db button:hover:not(:disabled), .list-db-row:hover { background: var(--hover); }
+  .list-db button.list-db-new:hover:not(:disabled) { background: color-mix(in srgb, var(--orange) 90%, var(--ink)); }
+  .list-db a.list-db-title:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+@media (max-width: 700px) {
+  .list-db-heading { flex-basis: 100%; }
+  .list-db-controls { width: 100%; }
+  .list-db-search { flex: 1 1 auto; }
+  .list-db-controls > .list-db-new { margin-left: auto; }
+  .list-db-settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .list-db-settings label:first-child { grid-column: 1 / -1; }
+  .list-db-tag { max-width: 60px; }
+  .list-db-tags .list-db-tag:nth-child(2) { display: none; }
+  .list-db-row { gap: 6px; padding-inline: 5px; }
+  .list-db-properties { gap: 4px; }
+}
+
+@media (max-width: 430px) {
+  .list-db-block { margin: 20px 0; }
+  .list-db-header { padding-inline: 9px; }
+  .list-db-heading { flex-wrap: wrap; }
+  .list-db-heading > strong { max-width: calc(100% - 65px); }
+  .list-db-scopes { flex-basis: 100%; padding-left: 22px; }
+  .list-db-settings-toggle > span { display: none; }
+  .list-db-search { width: 100px; }
+  .list-db-tags { display: none; }
+  .list-db-page-icon .list-db-icon { width: 13px; height: 13px; }
+  .list-db select.list-db-status { max-width: 83px; padding-inline: 3px; }
+  .list-db-date { max-width: 49px; padding-inline: 3px; }
+  .list-db-properties > .list-db-icon-button { width: 24px; padding: 3px; }
+  .list-db-create { padding-inline: 9px; gap: 4px; }
+}
+
+@media (pointer: coarse) {
+  .list-db button, .list-db button.list-db-icon-button, .list-db select.list-db-status { min-height: 44px; }
+  .list-db :is(input, select), .list-db-search input, .list-db-settings :is(input, select) { font-size: 1rem; }
+  .list-db button.list-db-icon-button { min-width: 36px; }
+  .list-db select.list-db-status { max-width: 110px; }
+  .list-db-date { max-width: 45px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list-db button { transition: background-color 120ms ease; }
+  .list-db button:active:not(:disabled) { transform: none; }
+}

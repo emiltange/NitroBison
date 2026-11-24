@@ -1,0 +1,9 @@
+.git
+node_modules
+dist
+release/
+reference/
+desktop/
+data
+.env
+*.log

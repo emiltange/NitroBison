@@ -1,0 +1,90 @@
+.graph-relations {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text-2);
+}
+.graph-relations[hidden], .graph-relations [hidden] { display: none; }
+.graph-relations-heading, .graph-relation-options, .graph-filter-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+.graph-relations-heading h3 { margin: 0; color: var(--ink); }
+.graph-relations p { margin: 0; line-height: 1.5; }
+.graph-relations-heading p { margin-top: 4px; }
+.graph-relations-heading [data-graph-clear-filters] { min-height: 32px; }
+.graph-relation-tags { min-width: 0; margin: 0; padding: 0; border: 0; }
+.graph-relation-tags legend { margin-bottom: 6px; padding: 0; }
+.graph-tag-strip, .graph-selected-links { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.graph-tag-strip { max-height: 106px; overflow: auto; padding: 2px; overscroll-behavior: contain; }
+.graph-tag-strip .fb-chip, .graph-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.graph-tag-strip .fb-chip[aria-pressed="true"] { border-color: var(--orange); background: var(--orange-soft); color: var(--orange-text); }
+.graph-tag-count { color: var(--text-3); font-variant-numeric: tabular-nums; font-size: .625rem; }
+.graph-tag-strip [aria-pressed="true"] .graph-tag-count { color: inherit; }
+.graph-link-picker { flex: 1 1 220px; max-width: 520px; min-width: 0; }
+.graph-link-picker select { width: 100%; min-width: 0; min-height: 34px; }
+.graph-match-toggle { display: flex; flex-wrap: wrap; align-self: end; gap: 4px; }
+.graph-match-toggle .fb-btn { min-height: 34px; }
+.graph-match-toggle [aria-pressed="true"] { border-color: var(--orange); background: var(--orange-soft); color: var(--orange-text); }
+.graph-selected-links:empty { display: none; }
+.graph-link-pill { border-color: var(--orange); background: var(--surface-subtle); color: var(--ink); }
+.graph-link-pill span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.graph-link-pill span:last-child { color: var(--orange-text); font-size: 1rem; line-height: 1; }
+.graph-relation-hint { color: var(--text-3); }
+.graph-filter-results { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+.graph-filter-result-heading { justify-content: start; }
+.graph-filter-result-heading > strong { color: var(--ink); font-size: .6875rem; }
+.graph-matched-documents { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(185px, 100%), 1fr)); gap: 7px; max-height: 218px; padding: 2px; overflow: auto; overscroll-behavior: contain; }
+.graph-matched-document { display: grid; align-content: start; gap: 4px; min-width: 0; min-height: 64px; padding: 10px; border-color: var(--line); border-radius: 7px; background: var(--surface-subtle); text-align: left; overflow-wrap: anywhere; cursor: pointer; }
+.graph-matched-document > strong { color: var(--ink); font-size: .6875rem; }
+.graph-matched-document > small { color: var(--orange-text); font-size: .625rem; line-height: 1.5; }
+.graph-matched-document > .fb-meta { color: var(--text-3); }
+.graph-filter-empty { padding: 8px 0 2px; }
+.graph-relations :is(button, select):focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.graph-relations .fb-chip:active { background: var(--orange-soft); }
+.graph-node.is-match .graph-node-dot { fill: var(--orange); stroke: var(--orange-text); stroke-width: 3; }
+.graph-node.is-anchor .graph-node-dot { fill: var(--yellow); stroke: var(--ink); stroke-width: 3; }
+.graph-node.is-anchor .graph-node-anchor-ring { fill: none; stroke: var(--orange); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.graph-node:is(.is-match, .is-anchor) text { fill: var(--ink); font-weight: 700; }
+.graph-node:focus-visible .graph-node-dot { stroke: var(--ink); stroke-width: 5; }
+.graph-edges .is-filter-edge :is(line, path) { stroke: var(--orange); stroke-width: 3; }
+.graph-list-note.is-match { border-color: var(--orange); background: var(--orange-soft); }
+.graph-list-note.is-anchor { border-color: var(--orange-text); box-shadow: inset 3px 0 var(--orange); }
+.graph-list-note .graph-anchor-label, .graph-list-note .graph-match-label { justify-self: start; width: fit-content; color: var(--orange-text); background: var(--card); }
+.graph-list-note .graph-anchor-label { color: var(--ink); background: var(--yellow); }
+.graph-inspector-actions [data-graph-pin-link] { min-height: 36px; white-space: normal; }
+.graph-inspector-actions [data-graph-pin-link][aria-pressed="true"] { border-color: var(--orange); background: var(--orange-soft); color: var(--orange-text); }
+@media (hover: hover) and (pointer: fine) {
+  .graph-matched-document:hover, .graph-link-pill:hover { border-color: var(--orange); background: var(--orange-soft); }
+}
+@media (max-width: 650px) {
+  .graph-relations { gap: 10px; padding: 12px; }
+  .graph-link-picker { flex-basis: 100%; max-width: none; }
+  .graph-match-toggle { width: 100%; }
+  .graph-match-toggle .fb-btn { flex: 1; }
+  .graph-tag-strip { max-height: 132px; }
+  .graph-relations :is(.fb-chip, .fb-btn, select), .graph-inspector-actions [data-graph-pin-link] { min-height: 44px; }
+  .graph-matched-documents { max-height: 200px; }
+}
+@media (pointer: coarse) {
+  .graph-relations :is(.fb-chip, .fb-btn, select), .graph-inspector-actions [data-graph-pin-link] { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .graph-relations .fb-btn:active { transform: none; }
+}

@@ -1,0 +1,183 @@
+/* Warm light neutrals and Slate dark surfaces, with orange actions.
+   Shared semantic roles retain the NitroBison component naming.
+   The theme is chosen with <html data-theme="light|dark">; set it before first paint. */
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--warm);
+  color-scheme: light;
+  font-synthesis: none;
+  /* Text scales with the viewport (about 1.19x–1.38x of the browser default) and honours the user's font size. */
+  font-size: clamp(115%, 102% + .18vw, 126%);
+
+  /* Palette */
+  --black: #D96B43;
+  --ink: #252621;
+  --muted: #77776f;
+  --warm: #f3f0e8;
+  --panel: #ebe7dd;
+  --card: #fffefa;
+  --line: #d9d5cb;
+  --yellow: #D96B43;
+  --yellow-soft: #F4E7BC;
+  --green: #5a9b63;
+  --green-soft: #e6f2df;
+  --orange: #D96B43;
+  --orange-soft: #F7E5D9;
+  --red: #c55248;
+
+  /* Semantic roles */
+  --rail: #171815;
+  --rail-ink: #e6d5b8;
+  --rail-active: #FFD1BB;
+  --on-black: #172220;
+  --on-accent: #172220;
+  --ink-soft: #353631;
+  --text-strong: #454640;
+  --text-2: #55564f;
+  --text-3: #686960;
+  --text-4: #898a82;
+  --link: #68450f;
+  --canvas: #f5f3ed;
+  --surface-raised: #fff;
+  --surface-subtle: #faf8f3;
+  --surface-sunken: #ece9e1;
+  --hover: #e2ded4;
+  --highlight: #fffbee;
+  --line-soft: #e9e6df;
+  --line-strong: #cbc7bd;
+  --green-text: #407749;
+  --green-line: #b7d4aa;
+  --yellow-text: #66501D;
+  --yellow-line: #A58A45;
+  --notice-text: #67604a;
+  --amber-soft: #f7e6cf;
+  --amber-text: #9a5d17;
+  --red-soft: #f7e2df;
+  --red-text: #a64037;
+  --red-line: #e8b9b3;
+  --blue-soft: #e3edf9;
+  --blue-text: #315d88;
+  /* Orange fills use dark text; small accent words use the stronger ink below. */
+  --orange-text: #994022;
+
+  /* Fixed chrome sizes */
+  --header-h: 57px;
+  --rail-w: 54px;
+  --bottom-bar-h: 52px;
+  --tap-min: 44px;
+
+  /* Shape */
+  --radius-control: 7px;
+  --radius-card: 9px;
+  --radius-popover: 10px;
+  --radius-dialog: 12px;
+  --radius-pill: 999px;
+  --focus-ring: 3px solid #994022;
+
+  /* Depth: tone and a 1px line first, shadow only for floating layers */
+  --shadow-lift: 0 3px 9px rgb(23 24 21 / 4%);
+  --shadow-hover: 0 4px 14px rgb(23 24 21 / 8%);
+  --shadow-float: 0 10px 28px rgb(23 24 21 / 14%);
+  --shadow-dialog: 0 24px 70px rgb(0 0 0 / 28%);
+  --scrim: rgb(23 24 21 / 58%);
+  --grain-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+
+  /* Motion: crisp and fast; a professional tool, not a toy */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press: 140ms;
+  --dur-fast: 160ms;
+  --dur-popover: 180ms;
+  --dur-base: 220ms;
+  --dur-panel: 280ms;
+  --dur-exit: 150ms;
+  /* Movement amounts; reduced motion sets them to "no movement" so only fades remain. */
+  --press-scale: .97;
+  --enter-scale: .97;
+  --dialog-scale: .96;
+  --enter-shift: 6px;
+}
+
+/* Dark: deep slate, orange actions and sand-tinted text. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --focus-ring: 3px solid #FFD1BB;
+  --black: #D96B43;
+  --ink: #f6efdf;
+  --muted: #c6d5c6;
+  --warm: #1e3434;
+  --panel: #263f40;
+  --card: #2f4f4f;
+  --line: #52716a;
+  --yellow: #D96B43;
+  --yellow-soft: #50472B;
+  --green: #6b8c6b;
+  --green-soft: #344937;
+  --orange: #D96B43;
+  --orange-soft: #543C32;
+  --red: #df8b7c;
+  --rail: #172b2c;
+  --rail-ink: #e6d5b8;
+  --rail-active: #FFD1BB;
+  --on-black: #172220;
+  --on-accent: #172220;
+  --ink-soft: #f6efdf;
+  --text-strong: #e1e1ce;
+  --text-2: #e1e1ce;
+  --text-3: #c6d5c6;
+  --text-4: #c6d5c6;
+  --link: #FFD1BB;
+  --canvas: #1e3434;
+  --surface-raised: #3b5d5a;
+  --surface-subtle: #294545;
+  --surface-sunken: #3b5752;
+  --hover: #3b5752;
+  --highlight: #3b5752;
+  --line-soft: #52716a;
+  --line-strong: #7b9990;
+  --green-text: #ccdfc0;
+  --green-line: #7b9990;
+  --yellow-text: #F6E5B5;
+  --yellow-line: #A58A45;
+  --notice-text: #e1e1ce;
+  --amber-soft: #3b5752;
+  --amber-text: #e3bf82;
+  --red-soft: #3e2c28;
+  --red-text: #eab3a7;
+  --red-line: #705047;
+  --blue-soft: #30494a;
+  --blue-text: #d1e2d9;
+  --orange-text: #FFD1BB;
+  --shadow-lift: 0 3px 9px rgb(0 0 0 / 20%);
+  --shadow-hover: 0 4px 14px rgb(0 0 0 / 25%);
+  --shadow-float: 0 10px 28px rgb(0 0 0 / 35%);
+  --shadow-dialog: 0 24px 70px rgb(0 0 0 / 45%);
+  --scrim: rgb(20 18 16 / 62%);
+}
+
+/* Base behaviour */
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: var(--link); }
+:is(button, input, select, textarea, a, summary, [tabindex]):focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+button:disabled { cursor: not-allowed; opacity: .6; }
+
+/* Touch: bigger targets, and 1rem inputs (19px or more) so iOS never zooms. */
+@media (pointer: coarse) {
+  :is(button, [role="button"], input, select) { min-height: var(--tap-min); }
+  :is(input, select, textarea) { font-size: 1rem; }
+}
+
+/* Reduced motion: gentler, not none. Movement goes to zero; opacity and colour fades keep their timing. */
+@media (prefers-reduced-motion: reduce) {
+  :root { --press-scale: 1; --enter-scale: 1; --dialog-scale: 1; --enter-shift: 0px; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
