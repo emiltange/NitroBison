@@ -1,6 +1,6 @@
 {
   "name": "nitrobison-markdown",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Offline-first Markdown workspace with connected notes, graphs and optional cloud sync.",
   "author": "NitroBison contributors",
   "main": "desktop/main.js",
@@ -38,11 +38,40 @@
   "build": {
     "appId": "org.nitrobison.app",
     "productName": "NitroBison",
-    "directories": { "output": "release", "buildResources": "desktop/icons" },
-    "files": ["desktop/*.js", "desktop/*.cjs", "dist/**/*", "src/core.js", "src/markdown-model.js", "src/markdown-paths.js", "src/directory.js", "src/ai.js", "package.json", "!node_modules/**/*"],
+    "directories": {
+      "output": "release",
+      "buildResources": "desktop/icons"
+    },
+    "files": [
+      "desktop/*.js",
+      "desktop/*.cjs",
+      "dist/**/*",
+      "src/core.js",
+      "src/markdown-model.js",
+      "src/markdown-paths.js",
+      "src/directory.js",
+      "src/ai.js",
+      "package.json",
+      "!node_modules/**/*"
+    ],
     "npmRebuild": false,
-    "win": { "target": "nsis", "icon": "desktop/icons/icon.ico", "artifactName": "NitroBison-${version}-windows-${arch}-setup.${ext}" },
-    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "deleteAppDataOnUninstall": false, "installerSidebar": "desktop/icons/installer-outcome.bmp", "include": "desktop/installer.nsh" },
-    "mac": { "target": "dmg", "category": "public.app-category.productivity", "icon": "desktop/icons/icon.icns" }
+    "win": {
+      "target": "nsis",
+      "icon": "desktop/icons/icon.ico",
+      "artifactName": "NitroBison-${version}-windows-${arch}-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "installerSidebar": "desktop/icons/installer-outcome.bmp",
+      "include": "desktop/installer.nsh"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity",
+      "icon": "desktop/icons/icon.icns"
+    }
   }
 }

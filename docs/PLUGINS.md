@@ -6,7 +6,7 @@
 
 Obsidian's official `obsidian-api` package supplies **TypeScript definitions**, not the Obsidian application runtime. Community plugin entry points import `obsidian`, extend `Plugin`, and access host objects such as `App`, `Vault`, `Workspace` and `MetadataCache`. Supplying a manifest or installing those type definitions does not provide those implementations. [Official API and plugin structure](https://github.com/obsidianmd/obsidian-api).
 
-NitroBison currently uses a textarea editor, a Marked/DOMPurify reading pipeline, IndexedDB snapshots, a browser/PWA runtime and optional static HTTP hosting. Electron is installed as development tooling, not integrated as an application or plugin host. No Obsidian host API, CodeMirror extension host or community-plugin loader is implemented. The retired SQLite/team implementation is preserved separately under `reference/team-workspace/`.
+NitroBison currently uses a textarea editor, a Marked/DOMPurify reading pipeline, IndexedDB snapshots, a browser/PWA runtime and optional static HTTP hosting. Electron is installed as development tooling, not integrated as an application or plugin host. No Obsidian host API, CodeMirror extension host or community-plugin loader is implemented.
 
 ## Compatibility by category
 

@@ -122,7 +122,7 @@ The runtime owns Chromium security updates; keep Electron patched. A smaller OS-
 
 ## Verification and release limits
 
-See the [verification record](VERIFICATION.md) for exercised checks and packaged runtime observations. Automated provider simulations do not prove live consent or cloud-vault identity. Public distribution still needs signing, real install/upgrade/uninstall checks, live-account continuity, macOS hardware checks and any advertised ARM64 checks. No automatic update feed is provided.
+Automated provider simulations do not prove live consent or cloud-vault identity. Public distribution still needs signing, real install/upgrade/uninstall checks, live-account continuity, macOS hardware checks and any advertised ARM64 checks. No automatic update feed is provided.
 
 ## Sources
 

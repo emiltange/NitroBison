@@ -1,8 +1,6 @@
 node_modules/
 dist/
 release/
-release-polish/
-data/
 .env
 *.log
 .DS_Store

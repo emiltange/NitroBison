@@ -1,5 +1,13 @@
 # Changelog
 
+## NitroBison 1.6.1
+
+- Renamed the app from FastBovine to NitroBison, with a new mascot, app icon and installer artwork.
+- Added a tag bar above the note title: type a tag and press Enter to add it; hover a tag to reveal its remove button.
+- Added **Settings → General → Appearance → Hide AI buttons**.
+- Fixed all `npm audit` findings: mermaid 12.3.0 (patched KaTeX), `@electron/universal` 3 and patched minimatch for the build tooling.
+- Removed the retired `reference/team-workspace/` archive and the old verification log; the Docker Compose service is now `nitrobison`.
+
 ## NitroBison 1.6.0
 
 - Added **Expanded In-Context Reading View** for the floating **Ask AI** widget (`⤢` / `⤡ Compact` header toggle + top-left desktop corner drag-to-resize, persisted size preference, inline **Save as page** on assistant replies, and an auto-growing multi-line `<textarea>` composer with `Enter` to send / `Shift+Enter` for newline) so long AI summaries and multi-line prompts are easy to read without leaving the active note.
