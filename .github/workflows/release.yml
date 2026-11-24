@@ -1,0 +1,66 @@
+# Builds the Windows installer for a version tag, signs it through SignPath when configured,
+# and attaches it to the GitHub release for that tag.
+#
+# Signing setup (once SignPath Foundation has approved the project):
+#   Secret   SIGNPATH_API_TOKEN
+#   Variables SIGNPATH_ORGANIZATION_ID, SIGNPATH_PROJECT_SLUG, SIGNPATH_SIGNING_POLICY_SLUG
+# Without them the installer is published unsigned.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch: # rebuild/re-sign the installer of an existing tag
+    inputs:
+      tag:
+        description: Release tag, e.g. v1.6.1
+        required: true
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run desktop:build
+
+      - id: unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-unsigned
+          path: release/*-setup.exe
+          if-no-files-found: error
+
+      - if: vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed
+
+      - name: Attach installer to release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          dir=release; [ -d signed ] && dir=signed
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "NitroBison ${TAG#v}" --notes "See CHANGELOG.md."
+          gh release upload "$TAG" "$dir"/*-setup.exe --clobber
