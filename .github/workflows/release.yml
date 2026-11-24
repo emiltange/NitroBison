@@ -23,6 +23,10 @@ permissions:
 jobs:
   windows:
     runs-on: windows-latest
+    env:
+      # The default TEMP is an 8.3 short path (RUNNER~1); linked-folder tests compare it with realpath() results.
+      TEMP: ${{ runner.temp }}
+      TMP: ${{ runner.temp }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +34,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 26 # desktop-linked-folders tests fail on Node 24
+          node-version: 24
           cache: npm
 
       - run: npm ci
