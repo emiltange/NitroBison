@@ -4,7 +4,7 @@ Offline-first Markdown workspace for connected notes, projects and graphs. Notes
 
 ## Download
 
-Get the Windows installer, `NitroBison-<version>-windows-x64-setup.exe`, from the [latest release](https://github.com/emiltange/NitroBison/releases/latest). Run it and pick an install folder. You don't need to install Node.js or run a server.
+**[⬇ Download NitroBison for Windows (x64)](https://github.com/emiltange/NitroBison/releases/latest/download/NitroBison-1.6.0-windows-x64-setup.exe)**. Older versions are on the [releases page](https://github.com/emiltange/NitroBison/releases). Run it and pick an install folder. You don't need to install Node.js or run a server.
 
 The installer isn't code-signed, so Windows SmartScreen may warn you. Choose **More info → Run anyway**.
 
