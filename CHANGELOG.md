@@ -1,5 +1,9 @@
 # Changelog
 
+## NitroBison 1.6.4
+
+- Fixed linked folders on Google Drive for Desktop (and other drives without hardlinks): creating or updating a note no longer fails with `EISDIR: illegal operation on a directory`; NitroBison now falls back to an exclusive copy. Press **Try again** to finish a save that failed before the update.
+
 ## NitroBison 1.6.3
 
 - Added **Settings → General → About → Check for updates**: shows the installed version and, on request, asks GitHub for the latest release and links to it when a newer one exists.

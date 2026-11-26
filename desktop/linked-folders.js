@@ -116,7 +116,8 @@ function applyEntry(plan, journal) {
 }
 
 const sameIdentity = (left, right) => left && right && left.dev === right.dev && left.ino === right.ino && left.birthtimeMs === right.birthtimeMs;
-const unsupportedLink = error => ['ENOTSUP', 'EOPNOTSUPP', 'ENOSYS', 'EXDEV', 'EPERM', 'EACCES', 'EINVAL'].includes(error.code);
+// Windows maps CreateHardLinkW's ERROR_INVALID_FUNCTION (e.g. Google Drive's virtual drive) to EISDIR.
+const unsupportedLink = error => ['ENOTSUP', 'EOPNOTSUPP', 'ENOSYS', 'EXDEV', 'EPERM', 'EACCES', 'EINVAL', 'EISDIR'].includes(error.code);
 const isPrefix = (partial, stage) => partial.content.length < stage.content.length && stage.content.subarray(0, partial.content.length).equals(partial.content);
 
 async function saveJournal(plan, journal) {

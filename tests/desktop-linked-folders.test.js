@@ -264,9 +264,9 @@ test('an interrupted journal cannot finish deleting files for a now-disabled log
   assert.equal(await fs.readFile(path.join(root, 'Welcome.md'), 'utf8'), '# Hello\n');
 });
 
-test('filesystems without hardlinks support creation, restart updates, rename and deletion', async t => {
+for (const code of ['ENOTSUP', 'EISDIR']) test(`filesystems without hardlinks (${code}) support creation, restart updates, rename and deletion`, async t => {
   const { root, profile, bindings } = await fixture(t);
-  t.mock.method(fs, 'link', async () => { throw Object.assign(new Error('hardlinks unsupported'), { code: 'ENOTSUP' }); });
+  t.mock.method(fs, 'link', async () => { throw Object.assign(new Error('hardlinks unsupported'), { code }); });
   await syncLinkedFolders(snapshot(), bindings, profile);
   assert.equal(await fs.readFile(path.join(root, 'Welcome.md'), 'utf8'), '# Hello\n');
   const restarted = await import(`../desktop/linked-folders.js?withoutLinks=${Date.now()}`);

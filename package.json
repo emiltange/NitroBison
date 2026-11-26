@@ -1,6 +1,6 @@
 {
   "name": "nitrobison-markdown",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Offline-first Markdown workspace with connected notes, graphs and optional cloud sync.",
   "author": "NitroBison contributors",
   "main": "desktop/main.js",
