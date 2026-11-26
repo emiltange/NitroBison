@@ -1,3 +1,4 @@
+import { isAndroid as android } from './native-save.js';
 let prompt;
 window.addEventListener('beforeinstallprompt', event => {
   event.preventDefault();
@@ -6,6 +7,7 @@ window.addEventListener('beforeinstallprompt', event => {
 
 export async function registerOffline(onStatus = () => {}) {
   if (window.nitrobisonDesktop?.isDesktop) { onStatus('Ready offline · bundled desktop app'); return; }
+  if (android()) { onStatus('Ready offline · bundled Android app'); return; }
   if (!('serviceWorker' in navigator) || !import.meta.env.PROD) return;
   try {
     const registration = await navigator.serviceWorker.register('/sw.js');
@@ -26,6 +28,7 @@ export async function registerOffline(onStatus = () => {}) {
 
 export async function installApp() {
   if (window.nitrobisonDesktop?.isDesktop) return 'NitroBison is running as a desktop app. The interface and diagrams are bundled for offline use. Browser notes use a separate profile: export a JSON backup from the browser, then restore it here. Updates are manual; download and install a newer release without deleting app data.';
+  if (android()) return 'NitroBison is running as an Android app. The interface and diagrams are bundled for offline use. Notes stay on this device: keep JSON backups from Settings → Data & files before uninstalling. Updates are manual; install a newer APK over this one.';
   if (window.matchMedia('(display-mode: standalone)').matches) return 'NitroBison is already running as an installed app.';
   if (prompt) {
     await prompt.prompt();

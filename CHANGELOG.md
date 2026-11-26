@@ -1,5 +1,10 @@
 # Changelog
 
+## NitroBison 1.6.5
+
+- Subfolders now appear nested under their parent folder in the sidebar tree instead of as separate `Parent/Child` rows.
+- Added an Android app (APK attached to each release). It runs the same offline workspace; backups and note exports open the Android share sheet. Linked folders, Markdown folder export, the AI bridge and cloud sign-in are not available on Android.
+
 ## NitroBison 1.6.4
 
 - Fixed linked folders on Google Drive for Desktop (and other drives without hardlinks): creating or updating a note no longer fails with `EISDIR: illegal operation on a directory`; NitroBison now falls back to an exclusive copy. Press **Try again** to finish a save that failed before the update.

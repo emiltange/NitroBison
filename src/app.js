@@ -9,6 +9,7 @@ import './graph-filter.css';
 import { openWorkspace } from './workspace.js';
 import { connectCloud, importMarkdownFiles, exportMarkdownFolder as exportFolder } from './cloud.js';
 import { installApp, registerOffline } from './install.js';
+import { isAndroid, shareFile } from './native-save.js';
 import { renderMarkdown } from './markdown.js';
 import { buildGraph, mountGraph } from './graph.js';
 import { escapeHtml, extractOutline, extractTags, withNoteLink, referenceOccurrences, tagOccurrences } from './markdown-model.js';
@@ -276,6 +277,7 @@ async function run(action, success) {
   } catch (error) { report(error, () => run(action, success)); return undefined; }
 }
 function download(name, content, type = 'text/plain;charset=utf-8') {
+  if (isAndroid()) { shareFile(name, content).catch(error => /cancel/i.test(error?.message) || report(error)); return; }
   const url = URL.createObjectURL(new Blob([content], { type }));
   const link = document.createElement('a');
   link.href = url;
@@ -582,11 +584,19 @@ function renderTree() {
   const rootNotes = active.filter(note => !note.folder);
   const favoritesMarkup = bookmarks.length ? `<section class="sidebar-group" aria-label="Favorites"><span class="sidebar-group-label">Favorites</span>${bookmarks.map(folder => `<button class="tree-note" data-project="${html(folder)}">${icon('star')}<span>${html(folder || 'Unfiled pages')}</span></button>`).join('')}</section>` : '';
   const rootOpen = previous.has('') ? previous.get('') : rootNotes.length > 0;
-  tree.innerHTML = `${favoritesMarkup}${folderVisible('') ? `<details class="tree-folder unfiled-pages" data-folder="" ${rootOpen ? 'open' : ''} aria-label="Private pages"><summary data-drop-folder=""><button class="folder-toggle" data-action="folder-toggle" aria-label="${rootOpen ? 'Collapse' : 'Expand'} Private pages" aria-expanded="${rootOpen}"><span class="folder-chevron" aria-hidden="true">›</span></button><button class="folder-open unfiled-heading" data-project="" ${view === 'folder' && folderFilter === '' ? 'aria-current="page"' : ''}>${icon('notes')}<span>Private pages</span></button><small>${rootNotes.length}</small><button class="fb-icon-btn folder-favorite" data-bookmark="" aria-pressed="${bookmarkSet.has('')}" aria-label="${bookmarkSet.has('') ? 'Unfavorite' : 'Favorite'} Private pages">${icon('star')}</button></summary><div class="folder-notes">${rootNotes.map(noteButton).join('') || '<p class="folder-empty">Pages without a folder appear here.</p>'}</div></details>` : ''}${folders.map(folder => {
+  // A folder nests under its parent only when the parent is shown; otherwise it stays top-level with its full path.
+  const visibleFolders = new Set(folders);
+  const parentOf = folder => { const parent = folder.slice(0, Math.max(0, folder.lastIndexOf('/'))); return parent && visibleFolders.has(parent) ? parent : null; };
+  const subfolders = Map.groupBy(folders, folder => parentOf(folder));
+  const folderMarkup = folder => {
     const children = active.filter(note => note.folder === folder);
+    const nested = subfolders.get(folder) || [];
+    const parent = parentOf(folder);
+    const label = parent ? folder.slice(parent.length + 1) : folder;
     const open = previous.has(folder) ? previous.get(folder) : false;
-    return `<details class="tree-folder" data-folder="${html(folder)}" ${open ? 'open' : ''}><summary data-drop-folder="${html(folder)}"><button class="folder-toggle" data-action="folder-toggle" aria-label="${open ? 'Collapse' : 'Expand'} ${html(folder)} pages" aria-expanded="${open}"><span class="folder-chevron" aria-hidden="true">›</span></button><button class="folder-open" data-project="${html(folder)}" ${view === 'folder' && folderFilter === folder ? 'aria-current="page"' : ''}>${icon('folder')}<span>${html(folder)}</span></button><small>${children.length}</small><button class="fb-icon-btn folder-favorite" data-bookmark="${html(folder)}" aria-pressed="${bookmarkSet.has(folder)}" aria-label="${bookmarkSet.has(folder) ? 'Unfavorite' : 'Favorite'} ${html(folder)}">${icon('star')}</button>${button('folder-menu', `Folder actions for ${html(folder)}`, 'menu', `data-folder="${html(folder)}" aria-haspopup="menu"`)}</summary><div class="folder-notes">${children.map(noteButton).join('') || '<p class="folder-empty">A little room to grow.</p>'}</div></details>`;
-  }).join('')}${!active.length && !folders.length ? '<p class="sidebar-empty">Your next idea starts with a new note.</p>' : ''}`;
+    return `<details class="tree-folder" data-folder="${html(folder)}" ${open ? 'open' : ''}><summary data-drop-folder="${html(folder)}" title="${html(folder)}"><button class="folder-toggle" data-action="folder-toggle" aria-label="${open ? 'Collapse' : 'Expand'} ${html(folder)} pages" aria-expanded="${open}"><span class="folder-chevron" aria-hidden="true">›</span></button><button class="folder-open" data-project="${html(folder)}" ${view === 'folder' && folderFilter === folder ? 'aria-current="page"' : ''}>${icon('folder')}<span>${html(label)}</span></button><small>${children.length}</small><button class="fb-icon-btn folder-favorite" data-bookmark="${html(folder)}" aria-pressed="${bookmarkSet.has(folder)}" aria-label="${bookmarkSet.has(folder) ? 'Unfavorite' : 'Favorite'} ${html(folder)}">${icon('star')}</button>${button('folder-menu', `Folder actions for ${html(folder)}`, 'menu', `data-folder="${html(folder)}" aria-haspopup="menu"`)}</summary><div class="folder-notes">${nested.map(folderMarkup).join('')}${children.map(noteButton).join('') || (nested.length ? '' : '<p class="folder-empty">A little room to grow.</p>')}</div></details>`;
+  };
+  tree.innerHTML = `${favoritesMarkup}${folderVisible('') ? `<details class="tree-folder unfiled-pages" data-folder="" ${rootOpen ? 'open' : ''} aria-label="Private pages"><summary data-drop-folder=""><button class="folder-toggle" data-action="folder-toggle" aria-label="${rootOpen ? 'Collapse' : 'Expand'} Private pages" aria-expanded="${rootOpen}"><span class="folder-chevron" aria-hidden="true">›</span></button><button class="folder-open unfiled-heading" data-project="" ${view === 'folder' && folderFilter === '' ? 'aria-current="page"' : ''}>${icon('notes')}<span>Private pages</span></button><small>${rootNotes.length}</small><button class="fb-icon-btn folder-favorite" data-bookmark="" aria-pressed="${bookmarkSet.has('')}" aria-label="${bookmarkSet.has('') ? 'Unfavorite' : 'Favorite'} Private pages">${icon('star')}</button></summary><div class="folder-notes">${rootNotes.map(noteButton).join('') || '<p class="folder-empty">Pages without a folder appear here.</p>'}</div></details>` : ''}${(subfolders.get(null) || []).map(folderMarkup).join('')}${!active.length && !folders.length ? '<p class="sidebar-empty">Your next idea starts with a new note.</p>' : ''}`;
   selectCreationFolder(creationFolder);
 }
 

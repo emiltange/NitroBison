@@ -1,5 +1,8 @@
-# Builds the Windows installer for a version tag, signs it through SignPath when configured,
-# and attaches it to the GitHub release for that tag.
+# Builds the Windows installer and the Android APK for a version tag, signs the installer through
+# SignPath when configured, and attaches both to the GitHub release for that tag.
+#
+# Android signing (required): secrets ANDROID_KEYSTORE_BASE64 (PKCS12 keystore, alias nitrobison)
+# and ANDROID_KEYSTORE_PASSWORD. Updates only install over apps signed with the same key.
 #
 # Signing setup (once SignPath Foundation has approved the project):
 #   Secret   SIGNPATH_API_TOKEN
@@ -66,5 +69,45 @@ jobs:
           TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           dir=release; [ -d signed ] && dir=signed
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "NitroBison ${TAG#v}" --notes "See CHANGELOG.md."
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "NitroBison ${TAG#v}" --notes "See CHANGELOG.md." || gh release view "$TAG" >/dev/null
           gh release upload "$TAG" "$dir"/*-setup.exe --clobber
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - run: npm ci
+      - run: npm run android:sync
+
+      - name: Build signed APK
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          NITROBISON_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          test -n "$ANDROID_KEYSTORE_BASE64" || { echo "ANDROID_KEYSTORE_BASE64 secret is missing"; exit 1; }
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          cd android && NITROBISON_KEYSTORE="$RUNNER_TEMP/release.jks" ./gradlew assembleRelease
+
+      - name: Attach APK to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          apk="NitroBison-$(node -p "require('./package.json').version")-android.apk"
+          cp android/app/build/outputs/apk/release/app-release.apk "$apk"
+          # Both jobs may create the release; whichever loses the race just reuses it.
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "NitroBison ${TAG#v}" --notes "See CHANGELOG.md." || gh release view "$TAG" >/dev/null
+          gh release upload "$TAG" "$apk" --clobber

@@ -92,7 +92,7 @@ body.is-resizing-sidebar { cursor: col-resize; user-select: none; }
 .tree-folder summary :is(.folder-favorite, [data-action="folder-menu"]) { opacity: 0; width: 20px; height: 20px; transition: opacity var(--dur-fast) ease; }
 .tree-folder summary:is(:hover, :focus-within) :is(.folder-favorite, [data-action="folder-menu"]), .tree-folder summary .folder-favorite[aria-pressed="true"] { opacity: 1; }
 .folder-chevron { display: inline-block; font-size: .75rem; line-height: 1; transition: transform var(--dur-fast) var(--ease-out); }
-.tree-folder[open] .folder-chevron { transform: rotate(90deg); }
+.tree-folder[open] > summary .folder-chevron { transform: rotate(90deg); }
 .folder-notes { margin: 1px 0 4px 19px; padding-left: 8px; border-left: 1px solid var(--line-soft); }
 .folder-empty, .sidebar-empty { padding: 6px 8px; margin: 0; font-size: .625rem; line-height: 1.5; color: var(--text-3); }
 .search-result small { display: block; margin: -2px 8px 6px 31px; font-size: .625rem; color: var(--text-3); }
